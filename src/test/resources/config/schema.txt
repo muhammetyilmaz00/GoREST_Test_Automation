@@ -1,0 +1,72 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/object1729322182.json",
+  "title": "Root",
+  "type": "array",
+  "default": [],
+  "items":{
+    "$id": "#root/items",
+    "title": "Items",
+    "type": "object",
+    "required": [
+      "id",
+      "name",
+      "email",
+      "gender",
+      "status"
+    ],
+    "properties": {
+      "id": {
+        "$id": "#root/items/id",
+        "title": "Id",
+        "type": "integer",
+        "examples": [
+          7476048
+        ],
+        "default": 0
+      },
+      "name": {
+        "$id": "#root/items/name",
+        "title": "Name",
+        "type": "string",
+        "default": "",
+        "examples": [
+          "Jyotsana Mehra"
+        ],
+        "pattern": "^.*$"
+      },
+      "email": {
+        "$id": "#root/items/email",
+        "title": "Email",
+        "type": "string",
+        "default": "",
+        "examples": [
+          "jyotsana_mehra@beer.example"
+        ],
+        "pattern": "^.*$"
+      },
+      "gender": {
+        "$id": "#root/items/gender",
+        "title": "Gender",
+        "type": "string",
+        "default": "",
+        "examples": [
+          "female"
+        ],
+        "pattern": "^.*$"
+      },
+      "status": {
+        "$id": "#root/items/status",
+        "title": "Status",
+        "type": "string",
+        "default": "",
+        "examples": [
+          "active"
+        ],
+        "pattern": "^.*$"
+      }
+    }
+  }
+
+}
