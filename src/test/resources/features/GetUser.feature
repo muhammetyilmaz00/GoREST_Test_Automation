@@ -1,4 +1,4 @@
-@regression @api @users @getUSerFeature
+@regression @API @users @getUSerFeature
 Feature: Get User
   As a user I want to get details of a user
 

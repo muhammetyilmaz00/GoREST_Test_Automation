@@ -1,4 +1,4 @@
-@regression @api @users @deleteUserFeature
+@regression @API @users @deleteUserFeature
 Feature: Delete User
   As a user I want to delete details of a user
 

@@ -1,5 +1,9 @@
 package com.eneco.utils;
 
+import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonParseException;
+import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.core.internal.com.fasterxml.jackson.databind.JsonNode;
+import io.cucumber.core.internal.com.fasterxml.jackson.databind.ObjectMapper;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,96 +16,68 @@ public class Helper {
 
     private static final Duration durationTimeout = Duration.ofSeconds(10);
 
-    public static void scrollIntoViewByXpath(String xpath) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-        JavascriptExecutor js = ((JavascriptExecutor) Driver.getDriver());
-        js.executeScript("arguments[0].scrollIntoView(true);", element);
-    }
-
-    public static void scrollIntoViewById(String id) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(id)));
-        JavascriptExecutor js = ((JavascriptExecutor) Driver.getDriver());
-        js.executeScript("arguments[0].scrollIntoView(true);", element);
-    }
-
-    public static void scrollIntoViewByName(String name) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name(name)));
-        JavascriptExecutor js = ((JavascriptExecutor) Driver.getDriver());
-        js.executeScript("arguments[0].scrollIntoView(true);", element);
+    public static void scrollIntoView(By locator) {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), durationTimeout);
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        JavascriptExecutor javascriptExecutor = ((JavascriptExecutor) Driver.getDriver());
+        javascriptExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
     public static void scrollDownToBottomOfPage() {
-        JavascriptExecutor js = ((JavascriptExecutor) Driver.getDriver());
-        js.executeScript("window.scrollBy(0,document.documentElement.offsetHeight)");
+        JavascriptExecutor javascriptExecutor = ((JavascriptExecutor) Driver.getDriver());
+        javascriptExecutor.executeScript("window.scrollBy(0,document.documentElement.offsetHeight)");
     }
 
-    public static void waitAndClickByXpath(String xpath) {
-        scrollIntoViewByXpath(xpath);
+    public static WebElement waitForElementToBeClickable(By locator) {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), durationTimeout);
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
-        element.click();
+        return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
-    public static void waitAndClickByID(String id) {
-        scrollIntoViewById(id);
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), durationTimeout);
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.id(id)));
-        element.click();
+    public static void waitAndClick(By locator) {
+        scrollIntoView(locator);
+        waitForElementToBeClickable(locator).click();
     }
 
-    public static void waitAndSendKeysByXpath(String xpath, String text) {
-        scrollIntoViewByXpath(xpath);
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), durationTimeout);
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
-        element.sendKeys(text);
+    public static void waitAndSendKeys(By locator, String text) {
+        scrollIntoView(locator);
+        waitForElementToBeClickable(locator).sendKeys(text);
     }
 
-    public static void waitAndSendKeysByName(String name, String text) {
-        scrollIntoViewByName(name);
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), durationTimeout);
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.name(name)));
-        element.sendKeys(text);
+    public static boolean isElementDisplayed(By locator) {
+        try {
+            return waitForElementToBeClickable(locator).isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
-    public static void waitAndSendKeysByID(String id, String text) {
-        scrollIntoViewById(id);
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), durationTimeout);
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.id(id)));
-        element.sendKeys(text);
+    public static LocalDate convertDate(String date, String format) {
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
     }
 
-    public static boolean isElementDisplayedByXpath(String xpath) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), durationTimeout);
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-        return element.isDisplayed();
+    public static String getTextOfWebElement(By locator) {
+        scrollIntoView(locator);
+        return waitForElementToBeClickable(locator).getText();
     }
 
-    public static void navigateURL(String URL) {
-        Driver.getDriver().navigate().to(URL);
+    public static void wait(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static String getCurrentURL() {
-        return Driver.getDriver().getCurrentUrl();
-    }
-
-    public static String getAttributeByName(String name, String attribute) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), durationTimeout);
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.name(name)));
-        return element.getAttribute(attribute);
-    }
-
-    public static LocalDate compareDate(String date) {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-    }
-
-    public static String getTextOfWebElementByXpath(String xpath) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), durationTimeout);
-        scrollIntoViewByXpath(xpath);
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-        return element.getText();
+    public static JsonNode parseJson(String stringObject) {
+        if (stringObject == null) {
+            throw new NullPointerException("Input string is null");
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            return objectMapper.readTree(stringObject);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -9,7 +9,7 @@ import static io.restassured.RestAssured.given;
 public class GoRestApiClient {
     public static RequestSpecification requestSpecification;
     public static RequestSpecification requestSpecificationWithInvalidToken;
-    public static final String USERS_ENDPOINT = "users";
+    public static final String USERS_ENDPOINT = "users/";
 
     /**
      * Set up the base URI and request specification for API calls

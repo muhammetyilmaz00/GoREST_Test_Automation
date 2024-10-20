@@ -18,7 +18,7 @@ public class DeleteUserStepDef extends GoRestApiClient {
     @Given("I request to delete the user")
     public void deleteUser() {
         LogUtils.info("I request to delete the user");
-        Response response = callService.executeDeleteRequest(USERS_ENDPOINT + "/", ContextStore.get("createdUserId"));
+        Response response = callService.executeDeleteRequest(USERS_ENDPOINT, ContextStore.get("createdUserId"));
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);
@@ -36,7 +36,7 @@ public class DeleteUserStepDef extends GoRestApiClient {
     @When("I request to delete the user with id {int}")
     public void iRequestToDeleteTheUserWithId(int userId) {
         LogUtils.info("I request to delete the user with id " + userId);
-        Response response = callService.executeDeleteRequest(USERS_ENDPOINT + "/", userId);
+        Response response = callService.executeDeleteRequest(USERS_ENDPOINT, userId);
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);
@@ -55,7 +55,7 @@ public class DeleteUserStepDef extends GoRestApiClient {
     @When("I request to delete the user without authentication")
     public void iRequestToDeleteTheUserWithoutAuthentication() {
         LogUtils.info("I request to delete the user without authentication");
-        Response response = callServiceWithInvalidToken.executeDeleteRequest(USERS_ENDPOINT + "/", ContextStore.get("createdUserId"));
+        Response response = callServiceWithInvalidToken.executeDeleteRequest(USERS_ENDPOINT, ContextStore.get("createdUserId"));
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);

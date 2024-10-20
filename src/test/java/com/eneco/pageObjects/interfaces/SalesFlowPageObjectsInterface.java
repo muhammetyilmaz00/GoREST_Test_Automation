@@ -11,17 +11,17 @@ public interface SalesFlowPageObjectsInterface {
 
     void clickNextButton();
 
-    void clickYesOnAnnualConsumption();
+    void enterAnnualConsumption(String decision);
 
-    void clickNoToSmartMeter();
+    void chooseSmartMeterOption(String decision);
 
     void enterAnnualElectricityConsumption(String annualConsumption);
 
-    void clickYesOnSolarPanel();
+    void chooseSolarPanelOption(String decision);
 
     void returnPowerBackToGrid(String power);
 
-    void clickNoOnMoving();
+    void chooseMovingOption(String decision);
 
     void chooseOffer();
 
@@ -29,7 +29,7 @@ public interface SalesFlowPageObjectsInterface {
 
     String checkTheStartDate();
 
-    void clickYesOnLiveOrWorkAddress();
+    void chooseLiveOrWorkAddressOption(String isLiveOrWorkAddress);
 
     void fillInPersonalInfo(String salutation, String name, String initials, String surName, String dateOfBirth);
 

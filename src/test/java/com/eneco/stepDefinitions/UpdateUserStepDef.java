@@ -19,7 +19,7 @@ public class UpdateUserStepDef extends GoRestApiClient {
     public void iRequestToUpdateTheUserWithTheFollowingDetails(DataTable dataTable) {
         LogUtils.info("I request to update the user with the following details" + dataTable.asMaps(String.class, String.class).toString());
         Map<String, String> userDetails = dataTable.transpose().asMap(String.class, String.class);
-        Response response = callService.executePutRequest(USERS_ENDPOINT + "/" + ContextStore.get("createdUserId"), userDetails);
+        Response response = callService.executePutRequest(String.format("%s%s", USERS_ENDPOINT, ContextStore.get("createdUserId")), userDetails);
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);
@@ -29,7 +29,7 @@ public class UpdateUserStepDef extends GoRestApiClient {
     public void iRequestToPartiallyUpdateTheUserWithTheFollowingDetails(DataTable dataTable) {
         LogUtils.info("I request to partially update the user with the following details" + dataTable.asMaps(String.class, String.class).toString());
         Map<String, String> userDetails = dataTable.transpose().asMap(String.class, String.class);
-        Response response = callService.executePatchRequest(USERS_ENDPOINT + "/" + ContextStore.get("createdUserId"), userDetails);
+        Response response = callService.executePatchRequest(String.format("%s%s", USERS_ENDPOINT, ContextStore.get("createdUserId")), userDetails);
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);
@@ -39,7 +39,7 @@ public class UpdateUserStepDef extends GoRestApiClient {
     public void iRequestToUpdateAUserWithInvalidIdAndTheFollowingDetails(int userId, DataTable dataTable) {
         LogUtils.info("I request to update a user with invalid id " + userId);
         Map<String, String> userDetails = dataTable.transpose().asMap(String.class, String.class);
-        Response response = callService.executePutRequest(USERS_ENDPOINT + "/" + userId, userDetails);
+        Response response = callService.executePutRequest(String.format("%s%s", USERS_ENDPOINT, userId), userDetails);
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);
@@ -49,7 +49,7 @@ public class UpdateUserStepDef extends GoRestApiClient {
     public void iRequestToUpdateAUserWithInvalidIdWithNoAuthentication(int userId, DataTable dataTable) {
         LogUtils.info("I request to update a user with invalid id " + userId + " with no authentication");
         Map<String, String> userDetails = dataTable.transpose().asMap(String.class, String.class);
-        Response response = callServiceWithInvalidToken.executePutRequest(USERS_ENDPOINT + "/" + userId, userDetails);
+        Response response = callServiceWithInvalidToken.executePutRequest(String.format("%s%s", USERS_ENDPOINT, userId), userDetails);
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);

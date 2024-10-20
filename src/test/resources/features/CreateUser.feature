@@ -1,4 +1,4 @@
-@regression @api @users @createUserFeature
+@regression @API @users @createUserFeature
 Feature: Create User
   As a user I want to create a new user
 

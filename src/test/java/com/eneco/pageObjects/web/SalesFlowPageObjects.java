@@ -2,160 +2,191 @@ package com.eneco.pageObjects.web;
 
 import com.eneco.pageObjects.interfaces.SalesFlowPageObjectsInterface;
 import com.eneco.utils.Helper;
+import org.openqa.selenium.By;
 
 public class SalesFlowPageObjects implements SalesFlowPageObjectsInterface {
 
+    String calculateButton = "[data-label='Bereken je maandbedrag']";
+    String electricityOption = "[data-label='Alleen stroom']";
+    String nextButton = "[data-label='Volgende']";
+    String yesButtonOnAnnualConsumption = "[data-label='Ja, ik vul mijn verbruik zelf in']";
+    String noButtonOnAnnualConsumption = "[data-label='Nee, help mij inschatten']";
+    String yesButtonOnSmartMeter = "[data-label='Ja, ik heb een slimme meter']";
+    String noButtonOnSmartMeter = "[data-label='Nee, ik heb geen slimme meter']";
+    String yesButtonOnSolarPanel = "[data-label='Ja, ik wek zelf stroom op']";
+    String noButtonOnSolarPanel = "[data-label='Nee, ik heb geen solarpanel']";
+    String yesButtonOnMoving = "[data-label='Ja, ik ga verhuizen']";
+    String noButtonOnMoving = "[data-label='Nee, ik ga niet verhuizen']";
+    String chooseOffer = "[data-label='Vast 1 jaar stroom']";
+    String goYourDataButton = "[data-label='Naar je gegevens']";
+    String yesButtonOnLiveOrWorkAddress = "[data-label='Ja']";
+    String noButtonOnLiveOrWorkAddress = "[data-label='Nee']";
+    String checkYourDataButton = "[data-label='Controleer je bestelling']";
+    String addressFinderXpath = "//*[@data-scope='AddressFinder']//span[@class='c-ezqaqn c-ezqaqn-glukyz-size-BodyS sparky-text']";
     String informationXpath = "(//p[@class='c-ezqaqn sparky-text'])";
+
 
     @Override
     public void fillInPostcodeWithAndHouseNumberWith(String postcode, String houseNumber) {
-        Helper.waitAndSendKeysByXpath("//*[@name='postalCode']", postcode);
-        Helper.waitAndSendKeysByXpath("//*[@name='houseNumber']", houseNumber);
+        Helper.waitAndSendKeys(By.name("postalCode"), postcode);
+        Helper.waitAndSendKeys(By.name("houseNumber"), houseNumber);
     }
 
     @Override
     public Boolean isAddressDisplayed() {
-        return Helper.isElementDisplayedByXpath("//*[@data-scope='AddressFinder']//span[@class='c-ezqaqn c-ezqaqn-glukyz-size-BodyS sparky-text']");
+        return Helper.isElementDisplayed(By.xpath(addressFinderXpath));
     }
 
     @Override
     public void clickCalculateButton() {
-        Helper.waitAndClickByXpath("//*[@data-label='Bereken je maandbedrag']");
+        Helper.waitAndClick(By.cssSelector(calculateButton));
     }
 
     @Override
     public void chooseElectricityOption() {
-        Helper.waitAndClickByXpath("//*[@data-label='Alleen stroom']");
+        Helper.waitAndClick(By.cssSelector(electricityOption));
     }
 
     @Override
     public void clickNextButton() {
-        Helper.waitAndClickByXpath("//*[@data-label='Volgende']");
+        Helper.waitAndClick(By.cssSelector(nextButton));
     }
 
     @Override
-    public void clickYesOnAnnualConsumption() {
-        Helper.waitAndClickByXpath("//*[@data-label='Ja, ik vul mijn verbruik zelf in']");
+    public void enterAnnualConsumption(String decision) {
+        if (decision.equalsIgnoreCase("yes")) {
+            Helper.waitAndClick(By.cssSelector(yesButtonOnAnnualConsumption));
+        } else if (decision.equalsIgnoreCase("no")) {
+            Helper.waitAndClick(By.cssSelector(noButtonOnAnnualConsumption));
+        }
     }
 
     @Override
-    public void clickNoToSmartMeter() {
-        Helper.waitAndClickByXpath("//*[@data-label='Nee, ik heb geen slimme meter']");
+    public void chooseSmartMeterOption(String decision) {
+        if (decision.equalsIgnoreCase("yes")) {
+            Helper.waitAndClick(By.cssSelector(yesButtonOnSmartMeter));
+        } else if (decision.equalsIgnoreCase("no")) {
+            Helper.waitAndClick(By.cssSelector(noButtonOnSmartMeter));
+        }
     }
 
     @Override
     public void enterAnnualElectricityConsumption(String consumption) {
-        Helper.waitAndSendKeysByName("usageElectricityHigh", consumption);
+        Helper.waitAndSendKeys(By.name("usageElectricityHigh"), consumption);
     }
 
     @Override
-    public void clickYesOnSolarPanel() {
-        Helper.waitAndClickByXpath("//*[@data-label='Ja, ik wek zelf stroom op']");
+    public void chooseSolarPanelOption(String decision) {
+        if (decision.equalsIgnoreCase("yes")) {
+            Helper.waitAndClick(By.cssSelector(yesButtonOnSolarPanel));
+        } else if (decision.equalsIgnoreCase("no")) {
+            Helper.waitAndClick(By.cssSelector(noButtonOnSolarPanel));
+        }
     }
 
     @Override
     public void returnPowerBackToGrid(String power) {
-        Helper.waitAndSendKeysByName("solarPanelsOutput", power);
+        Helper.waitAndSendKeys(By.name("solarPanelsOutput"), power);
     }
 
     @Override
-    public void clickNoOnMoving() {
-        Helper.waitAndClickByXpath("//*[@data-label='Nee, ik ga niet verhuizen']");
+    public void chooseMovingOption(String decision) {
+        if (decision.equalsIgnoreCase("yes")) {
+            Helper.waitAndClick(By.cssSelector(yesButtonOnMoving));
+        } else if (decision.equalsIgnoreCase("no")) {
+            Helper.waitAndClick(By.cssSelector(noButtonOnMoving));
+        }
     }
 
     @Override
     public void chooseOffer() {
-        Helper.waitAndClickByXpath("//*[@data-label='Vast 1 jaar stroom']");
+        Helper.waitAndClick(By.cssSelector(chooseOffer));
     }
 
     @Override
     public void clickGoYourData() {
-        Helper.waitAndClickByXpath("//*[@data-label='Naar je gegevens']");
+        Helper.waitAndClick(By.cssSelector(goYourDataButton));
     }
 
     @Override
     public String checkTheStartDate() {
-        return Helper.getAttributeByName("deliveryDate", "value");
+        return Helper.waitForElementToBeClickable(By.name("deliveryDate")).getAttribute("value");
     }
 
     @Override
-    public void clickYesOnLiveOrWorkAddress() {
-        Helper.waitAndClickByXpath("//*[@data-label='Ja']");
+    public void chooseLiveOrWorkAddressOption(String isLiveOrWorkAddress) {
+        if (isLiveOrWorkAddress.equalsIgnoreCase("yes")) {
+            Helper.waitAndClick(By.cssSelector(yesButtonOnLiveOrWorkAddress));
+        } else if (isLiveOrWorkAddress.equalsIgnoreCase("no")) {
+            Helper.waitAndClick(By.cssSelector(noButtonOnLiveOrWorkAddress));
+        }
     }
 
     @Override
     public void fillInPersonalInfo(String salutation, String name, String initials, String surName, String dateOfBirth) {
         Helper.scrollDownToBottomOfPage();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        Helper.wait(1); // TODO: remove this
+
+        if (salutation.equals("Dhr")) {
+            Helper.waitAndClick(By.xpath("//*[@data-label='Dhr.']"));
+        } else if (salutation.equals("Mevr")) {
+            Helper.waitAndClick(By.xpath("//*[@data-label='Mevr.']"));
         }
 
-        if (salutation.equals("Mr")) {
-            Helper.waitAndClickByXpath("//*[@data-label='Dhr.']");
-        } else if (salutation.equals("Mrs")) {
-            Helper.waitAndClickByXpath("//*[@data-label='Mevr.']");
-        }
-
-        Helper.waitAndSendKeysByName("firstName", name);
-        Helper.waitAndSendKeysByName("initials", initials);
-        Helper.waitAndSendKeysByName("surname", surName);
+        Helper.waitAndSendKeys(By.name("firstName"), name);
+        Helper.waitAndSendKeys(By.name("initials"), initials);
+        Helper.waitAndSendKeys(By.name("surname"), surName);
         dateOfBirth = dateOfBirth.replace("-", "");
         String day = dateOfBirth.substring(0, 2);
         String month = dateOfBirth.substring(2, 4);
         String year = dateOfBirth.substring(4, 8);
-        Helper.waitAndSendKeysByName("day", day);
-        Helper.waitAndSendKeysByName("month", month);
-        Helper.waitAndSendKeysByName("year", year);
+        Helper.waitAndSendKeys(By.name("day"), day);
+        Helper.waitAndSendKeys(By.name("month"), month);
+        Helper.waitAndSendKeys(By.name("year"), year);
     }
 
     @Override
     public void fillInPhoneNumberAndEmail(String phoneNumber, String email) {
-        Helper.waitAndSendKeysByName("phoneNumber", phoneNumber);
-        Helper.waitAndSendKeysByName("emailAddress", email);
+        Helper.waitAndSendKeys(By.name("phoneNumber"), phoneNumber);
+        Helper.waitAndSendKeys(By.name("emailAddress"), email);
     }
 
     @Override
     public void clickCheckYourDataButton() {
         Helper.scrollDownToBottomOfPage();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        Helper.waitAndClickByXpath("//*[@data-label='Controleer je bestelling']");
+        Helper.wait(1); // TODO: remove this
+        Helper.waitAndClick(By.cssSelector(checkYourDataButton));
     }
 
     @Override
     public String getFullName() {
-        return Helper.getTextOfWebElementByXpath(informationXpath + "[1]");
+        return Helper.getTextOfWebElement(By.xpath(informationXpath + "[1]"));
     }
 
     @Override
     public String getDateOfBirth() {
-        return Helper.getTextOfWebElementByXpath(informationXpath + "[2]");
+        return Helper.getTextOfWebElement(By.xpath(informationXpath + "[2]"));
     }
 
     @Override
     public String getPhoneNumber() {
-        return Helper.getTextOfWebElementByXpath(informationXpath + "[3]");
+        return Helper.getTextOfWebElement(By.xpath(informationXpath + "[3]"));
     }
 
     @Override
     public String getEmail() {
-        return Helper.getTextOfWebElementByXpath(informationXpath + "[4]");
+        return Helper.getTextOfWebElement(By.xpath(informationXpath + "[4]"));
     }
 
     @Override
     public String getHouseNumber() {
-        String fullAddress = Helper.getTextOfWebElementByXpath(informationXpath + "[5]");
+        String fullAddress = Helper.getTextOfWebElement(By.xpath(informationXpath + "[5]"));
         return fullAddress.substring(fullAddress.indexOf(' ') + 1);
     }
 
     @Override
     public String getPostCode() {
-        String postCodeAndCity = Helper.getTextOfWebElementByXpath(informationXpath + "[6]");
+        String postCodeAndCity = Helper.getTextOfWebElement(By.xpath(informationXpath + "[6]"));
         return postCodeAndCity.substring(0, postCodeAndCity.indexOf(' '));
     }
 

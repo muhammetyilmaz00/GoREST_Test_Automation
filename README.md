@@ -17,7 +17,7 @@ These tests provide confidence in the functionality and reliability of GoREST AP
 * pojo: This package contains plain old Java object (POJO) classes (e.g. User.java).
 * src/test/resources: This directory contains test resources.
 * features: This directory contains Cucumber feature files (e.g. GetUser.feature, CreateUser.feature, etc.).
-* config: This directory contains application properties (baseURI, homepage, browser), log4j and additional files (e.g. schema.txt).
+* config: This directory contains application properties (baseURI, homepage, browser), log4j and additional files (e.g. schema.json).
 * .github/workflows: This directory contains GitHub Actions workflow files (e.g. maven-cucumber.yml).
 * setup.sh: Setup script for installing dependencies and configuring the project
 
@@ -56,6 +56,7 @@ This resource will provide you with in-depth details about the API endpoints and
 * Install dependencies: Run the command **mvn clean install** to install the project dependencies.
 * Configure the environment: Create a **configuration.properties** file in the root directory and add the necessary property **token**
 * Set up the IDE: Import the project into your IDE and configure the project settings (e.g. Java version, Maven settings).
+* You can also execute the **setup.sh** to install the dependencies, Java, Maven and configure the project.
 
 ## Additional Setup Instructions
 

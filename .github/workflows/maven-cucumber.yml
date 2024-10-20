@@ -25,11 +25,15 @@ jobs:
           distribution: 'oracle'
           java-version: '21'
 
-      # Step 3: Create configuration file
-      - name: Create configuration file
+      # Step 3: Create/Update configuration file
+      - name: Create/Update configuration file
         run: |
-          touch configuration.properties
-          echo "token=${{ secrets.token }}" >> configuration.properties
+          if [ -f configuration.properties ]; then
+            grep -q "token=" configuration.properties && sed -i "s/token=.*/token=${{ secrets.token }}/" configuration.properties || echo "token=${{ secrets.token }}" >> configuration.properties
+          else
+            touch configuration.properties
+            echo "token=${{ secrets.token }}" >> configuration.properties
+          fi
 
       # Step 4: Run Maven build and Cucumber tests
       - name: Build with Maven and run Cucumber tests

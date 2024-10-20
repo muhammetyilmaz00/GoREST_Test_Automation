@@ -1,4 +1,4 @@
-@regression @api @users @updateUserFeature
+@regression @API @users @updateUserFeature
 Feature: Update User
   As a user I want to update details of a user
 

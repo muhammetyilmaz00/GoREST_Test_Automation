@@ -31,7 +31,7 @@ public class GetUserStepDef extends GoRestApiClient {
         LogUtils.info("Validate the response against the schema");
         String schema;
         try {
-            schema = new String(Files.readAllBytes(Paths.get("src/test/resources/config/schema.txt")));
+            schema = new String(Files.readAllBytes(Paths.get("src/test/resources/config/schema.json")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -49,12 +49,12 @@ public class GetUserStepDef extends GoRestApiClient {
 
     @And("I request to get the newly created user with {string}")
     public void iRequestToGetTheNewlyCreatedUserWith(String field) {
-        LogUtils.info("Request to get the newly created user with "+field);
+        LogUtils.info("Request to get the newly created user with " + field);
         Response response = null;
-        if(field.equals("id")){
-            response = callService.executeGetRequest(USERS_ENDPOINT + "/" + ContextStore.get("createdUserId"));
-        } else if (field.equals("name")){
-            response = callService.executeGetRequest(USERS_ENDPOINT + "?name=" + ContextStore.get("createdUserName"));
+        if (field.equals("id")) {
+            response = callService.executeGetRequest(String.format("%s%s", USERS_ENDPOINT, ContextStore.get("createdUserId")));
+        } else if (field.equals("name")) {
+            response = callService.executeGetRequest(String.format("%s?name=%s", USERS_ENDPOINT, ContextStore.get("createdUserName")));
         }
 
         LogUtils.info("Store the response for further assertions");
@@ -64,7 +64,7 @@ public class GetUserStepDef extends GoRestApiClient {
     @When("I request to get a user with id {int}")
     public void iRequestToGetAUserWithId(int userId) {
         LogUtils.info("I request to get a user with id " + userId);
-        Response response = callService.executeGetRequest(USERS_ENDPOINT + "/" + userId);
+        Response response = callService.executeGetRequest(String.format("%s%s", USERS_ENDPOINT, userId));
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);
@@ -83,7 +83,7 @@ public class GetUserStepDef extends GoRestApiClient {
     @When("I request to get all users on page {int} with {int} users per page")
     public void iRequestToGetAllUsersOnPageWithUsersPerPage(int page, int usersPerPage) {
         LogUtils.info("I request to get all users on page " + page + " with " + usersPerPage + " users per page");
-        Response response = callService.executeGetRequest(USERS_ENDPOINT + "?page=" + page + "&per_page=" + usersPerPage);
+        Response response = callService.executeGetRequest(String.format("%s?page=%s&per_page=%s", USERS_ENDPOINT, page, usersPerPage));
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);
@@ -105,7 +105,7 @@ public class GetUserStepDef extends GoRestApiClient {
         Response response = ContextStore.get("response");
 
         LogUtils.info("Assert that the response contains pagination information");
-        Assert.assertTrue(response.header("x-pagination-limit").contains(""+limit));
+        Assert.assertTrue(response.header("x-pagination-limit").contains("" + limit));
         Assert.assertTrue(response.header("x-pagination-page").contains("1"));
     }
 
@@ -113,7 +113,7 @@ public class GetUserStepDef extends GoRestApiClient {
     @When("I request to get a user with id {int} with no authentication")
     public void iRequestToGetAUserWithIdWithNoAuthentication(int userId) {
         LogUtils.info("I request to get a user with id " + userId + " with no authentication");
-        Response response = callServiceWithInvalidToken.executeGetRequest(USERS_ENDPOINT + "/" + userId);
+        Response response = callServiceWithInvalidToken.executeGetRequest(String.format("%s%s", USERS_ENDPOINT, userId));
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);
@@ -122,7 +122,7 @@ public class GetUserStepDef extends GoRestApiClient {
     @When("I request to get a user with a non-numeric id {string}")
     public void iRequestToGetAUserWithANonNumericIdXyz(String userId) {
         LogUtils.info("I request to get a user with a non-numeric id " + userId);
-        Response response = callService.executeGetRequest(USERS_ENDPOINT + "/" + userId);
+        Response response = callService.executeGetRequest(String.format("%s%s", USERS_ENDPOINT, userId));
 
         LogUtils.info("Store the response for further assertions");
         ContextStore.put("response", response);
