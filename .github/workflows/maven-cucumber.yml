@@ -24,7 +24,7 @@ jobs:
         with:
           distribution: 'oracle'
           java-version: '21'
-
+          cache: 'maven'
       # Step 3: Create/Update configuration file
       - name: Create/Update configuration file
         run: |
